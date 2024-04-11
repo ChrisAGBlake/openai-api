@@ -22,13 +22,19 @@ def chat_completion(queries_and_responses):
         temperature=1,
         stream=True
     )
+    all_text = ''
     for chunk in response:
         text = chunk.choices[0].delta.content
         if text is not None:
             print(text, end='')
+            all_text += text
         else:
             break
     print('\n\n------RESPONSE END------\n\n')
+
+    # write out the response to a markdown file
+    with open('response.md', 'w') as file:
+        file.write(all_text)
 
 if __name__ == '__main__':
     with open('query.txt', 'r') as file:
